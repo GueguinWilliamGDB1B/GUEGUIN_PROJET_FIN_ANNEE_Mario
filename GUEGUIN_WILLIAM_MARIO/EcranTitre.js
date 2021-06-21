@@ -1,3 +1,11 @@
+var boutonJouer;
+var boutonCommande;
+var jouer = false;
+var commande = false;
+
+
+
+
 class EcranTitre extends Phaser.Scene {
 
     constructor ()
@@ -11,45 +19,97 @@ class EcranTitre extends Phaser.Scene {
     preload ()
     {
         this.load.image('fond', 'assets/interfaceMenu.png');
-        this.load.image('jouer', 'assets/bouton_jouer.png');
+        
+        this.load.spritesheet('commandes', 'assets/commandesSpritesheet.png', { frameWidth: 201, frameHeight: 64 });
+        this.load.spritesheet('jouer', 'assets/jouerSpritesheet.png', { frameWidth: 254, frameHeight: 110 });
+        
+        
         
     }
 
     create ()
     {
         this.fond = this.add.image(448, 224, 'fond');
-        this.add.image(752, 176, 'jouer');
-
-        this.input.manager.enabled = true;
-
-        this.input.once('pointerdown', function () {
-
-            this.scene.start("stage");
-
-        }, this);
-    }
-
+        
+        boutonJouer = this.add.sprite(746,125, 'jouer').setInteractive({ cursor: 'pointer' });
+        boutonCommande = this.add.sprite(744,250, 'commandes').setInteractive({ cursor: 'pointer' });
+        
+        
+        /////////////////////bouton jouer////////////////////
+const anims = this.anims;
+    anims.create({
+        ///////////////jouer/////////////////
+        key: 'jouerSimple',
+        frames: this.anims.generateFrameNumbers('jouer', { start: 0, end: 0 }),
+        frameRate: 5,
+      });
+    anims.create({
+        key: 'jouerDessus',
+        frames: this.anims.generateFrameNumbers('jouer', { start: 1, end: 1 }),
+        frameRate: 5,
+      });
+       
+    ////////////////////////////commandes//////////////////
+    anims.create({
+        key: 'commandesSimple',
+        frames: this.anims.generateFrameNumbers('commandes', { start: 0, end: 0 }),
+        frameRate: 5,
+      });
+    anims.create({
+        key: 'commandesDessus',
+        frames: this.anims.generateFrameNumbers('commandes', { start: 1, end: 1 }),
+        frameRate: 5,
+      });
+    
+   
+        
+   
 }
+        
+        
+        
+    
+update (){
+    ///////////////////////////////////bouton Jouer//////////////////////////////////////////
+    
+    boutonJouer.on('pointerover', function (event) {
+        boutonJouer.anims.play('jouerDessus',true);
+    });
 
-/*class SceneOne extends Phaser.Scene{
-    constructor(){
-        super("sceneOne");
-        this.pad = null;
+    boutonJouer.on('pointerout', function (event) {
+      boutonJouer.anims.play('jouerSimple',true);
+    });
+
+    boutonJouer.on('pointerdown', function (pointer) {
+        jouer = true;  
+    });
+    if(jouer == true){
+        jouer = false;
+        this.scene.start("sceneModeDeJeu");
     }
-    init(data){
+    
+    
+    ///////////////////////////////////bouton Commandes///////////////////////
+    
+    
+    boutonCommande.on('pointerover', function (event) {
+        boutonCommande.anims.play('commandesDessus',true);
+    });
+
+    boutonCommande.on('pointerout', function (event) {
+      boutonCommande.anims.play('commandesSimple',true);
+    });
+
+    boutonCommande.on('pointerdown', function (pointer) {
+        commande = true;  
+    });
+    if(commande == true){
+        commande = false;
+        this.scene.start("sceneCommandes");
     }
-    preload(){   
-        this.load.image("tiles", "assets/tiled.png");
-        this.load.tilemapTiledJSON("map_1_placeholder", "maison.json");
-        //this.load.image('player', 'assets/player.png');
-        this.load.spritesheet('player', 'assets/perso_spritesheet.png', { frameWidth: 31, frameHeight: 48 });
-    }
-    create(){
-        const map = this.make.tilemap({key: 'map_1_placeholder'});
-        const tileset = map.addTilesetImage('CaseBase', 'tiles');
-        const terrain = map.createStaticLayer('sol', tileset, 0, 0);
-        const bloquant = map.createStaticLayer('mur', tileset, 0, 0);
-        const transitionDesert1 = map.createStaticLayer('sortie_maison', tileset, 0, 0);
+    
+   
+
         
-        
-*/
+    }
+}
