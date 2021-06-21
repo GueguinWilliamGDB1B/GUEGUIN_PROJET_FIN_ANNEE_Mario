@@ -23,7 +23,7 @@ var grosseMonnaie1;
 var grosseMonnaies1;
 var plateforme1;
 var plateformes1;
-var score = 2000;
+var score = 0;
 var scoreText;
 var scoreObjectif;
 var bullet;
