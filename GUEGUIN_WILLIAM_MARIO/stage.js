@@ -169,11 +169,11 @@ create (){
     groupeFleches= this.physics.add.group();
     
     
-    //player = this.physics.add.sprite(3100, 200, 'dude');
+    ///player = this.physics.add.sprite(3100, 200, 'dude');
     //player = this.physics.add.sprite(8803, 1968, 'dude');
-    player = this.physics.add.sprite(9100, 650, 'dude');
+    //player = this.physics.add.sprite(9100, 650, 'dude');
     //player = this.physics.add.sprite(5000, 400, 'dude');
-    //player = this.physics.add.sprite(300, 1300, 'dude');
+    player = this.physics.add.sprite(300, 1440, 'dude');
     //player = this.physics.add.sprite(7900, 2000, 'dude');
     player.setBounce(0);
     player.setSize(58,160);
