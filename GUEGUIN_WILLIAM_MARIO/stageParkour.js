@@ -64,20 +64,12 @@ var SoldatPrendPiece = true;
 var compteurDepart = 100;
 var courseDepart = false;
 
-var timedEvent;
-var text;
-var chronoText;
-var monTimer;
-var chrono=0;
-var bouton_stop_resume;
-var bouton_reset;
-var stopped = false;
-var narrato;
-var gameStarted = false;
-var tutoChrono;
+var speedrunTimer = 0;
+var speedrunMinute = 0;
+var textTimer;
+var loopTimer;
 
-
-
+var speedrunMode = true;
 
 var KeyQ;
 var KeyD;
@@ -163,7 +155,7 @@ create (){
     //player = this.physics.add.sprite(3100, 200, 'dude');
     //player = this.physics.add.sprite(8803, 1968, 'dude');
     //player = this.physics.add.sprite(5000, 400, 'dude');
-    player = this.physics.add.sprite(300, 1440, 'dude');
+    player = this.physics.add.sprite(300, 1300, 'dude');
     //player = this.physics.add.sprite(7900, 2000, 'dude');
     player.setBounce(0);
     player.setSize(58,160);
@@ -266,31 +258,19 @@ create (){
         this.physics.add.collider(player, bloquant);  
         this.physics.add.collider(player, plateformes1);//,contactPlateforme,null, this);
     
-    
-    
-    
-
-        //timer
-       monTimer = this.time.addEvent({
-          delay: 1000,
-          callback: compteUneSeconde,
-          callbackScope: this,
-          loop: true
-        });  
-
-        chronoText = this.add.text(100, 30, "Temps: 0", {
-        fontStyle: "bold",
-        fontSize: "24px",
-        fill: "#75161e" //Couleur de l'écriture
-        });
-        chronoText.setScrollFactor(0);
-
-        bouton_stop_resume = this.input.keyboard.addKey("S");
-        bouton_reset = this.input.keyboard.addKey("R");
-
-
-            //tuto chrono
+    if(speedrunMode){
+        textTimer = this.add.text(100,35,{ fontSize: '36px', fill: '#75161e' }).setScrollFactor(0);
         
+        loopTimer = this.time.addEvent({delay: 1000, callback: onEvent, callbackScope: this, loop: true});
+            
+        function onEvent (){
+            speedrunTimer +=1;
+            
+        }
+    }
+    
+    
+
 
       
 }
@@ -307,30 +287,14 @@ update (){
    }
     
     
+    if(speedrunMode){
+        textTimer.setText('Timer: '+ speedrunMinute + ':'+ speedrunTimer);
+    }
     
-    
-    //timer
-
-            // reset du chrono (bouton R)
-        if (Phaser.Input.Keyboard.JustDown(bouton_reset)) {
-           chrono = 0;
-           chronoText.setText("Temps: " + chrono);
-           monTimer.reset({ delay:1000, callback: compteUneSeconde, callbackScope: this,
-                          loop: true});
-        }
-
-        // pause / reprise (bouton S)
-        if (Phaser.Input.Keyboard.JustDown(bouton_stop_resume)) {
-            if (stopped == false) {  // on stoppe le timer
-               monTimer.reset({ paused: true });
-               stopped = true; // on met a jour le booleen
-            } 
-            else {
-                monTimer.reset({ delay:1000, callback: compteUneSeconde, callbackScope: this,
-                              loop: true});
-                stopped = false; // on met a jour le booleen
-            }     
-        }
+    if(speedrunTimer ===60){
+        speedrunTimer = 0;
+        speedrunMinute +=1;
+    }
 
     
     
@@ -341,10 +305,6 @@ update (){
     
     
     
-         function compteUneSeconde () {
-            chrono= chrono+1; // on incremente le chronometre d'une unite
-            chronoText.setText("Temps: "+ chrono);
-        }  
     
     
     boutonHOMEParkour.on('pointerover', function (event) {
